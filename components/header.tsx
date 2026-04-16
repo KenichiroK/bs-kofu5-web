@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, TreesIcon as Tree } from "lucide-react"
+import Image from "next/image"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const navigation = [
@@ -21,9 +22,13 @@ export function Header() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-            <Tree className="h-6 w-6 text-primary-foreground" />
-          </div>
+          <Image
+            src="/icon.png"
+            alt="ボーイスカウト甲府第5団"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
           <div className="flex flex-col">
             <span className="text-sm font-bold text-foreground leading-tight">ボーイスカウト</span>
             <span className="text-xs text-muted-foreground leading-tight">甲府第5団</span>

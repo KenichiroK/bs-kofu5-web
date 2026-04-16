@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { TreesIcon as Tree, Mail, MapPin } from "lucide-react"
+import Image from "next/image"
+import { Mail, MapPin } from "lucide-react"
 
 const navigation = {
   main: [
@@ -23,9 +24,13 @@ export function Footer() {
           {/* Logo & Description */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-                <Tree className="h-6 w-6 text-primary-foreground" />
-              </div>
+              <Image
+                src="/icon.png"
+                alt="ボーイスカウト甲府第5団"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
               <div className="flex flex-col">
                 <span className="text-sm font-bold text-background leading-tight">ボーイスカウト</span>
                 <span className="text-xs text-background/70 leading-tight">甲府第5団</span>
