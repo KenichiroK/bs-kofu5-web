@@ -117,10 +117,12 @@ export async function POST(request: NextRequest) {
     const replyOk = replyResult.status === "fulfilled" && replyResult.value.data
 
     if (!notifyOk) {
-      console.error("Notify email failed:", notifyResult.status === "fulfilled" ? notifyResult.value.error : notifyResult.reason)
+      const err = notifyResult.status === "fulfilled" ? notifyResult.value.error : notifyResult.reason
+      console.error("Notify email failed:", JSON.stringify(err))
     }
     if (!replyOk) {
-      console.error("Reply email failed:", replyResult.status === "fulfilled" ? replyResult.value.error : replyResult.reason)
+      const err = replyResult.status === "fulfilled" ? replyResult.value.error : replyResult.reason
+      console.error("Reply email failed:", JSON.stringify(err))
     }
 
     if (!notifyOk && !replyOk) {
@@ -130,9 +132,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({
+      success: true,
+      // 片方失敗した場合は警告を含める（デバッグ用、本番では削除可）
+      ...((!notifyOk || !replyOk) && { warning: "一部のメール送信に失敗しました" }),
+    })
   } catch (error) {
-    console.error("Contact form error:", error)
+    console.error("Contact form error:", error instanceof Error ? error.message : error)
     return NextResponse.json(
       { error: "送信に失敗しました。時間をおいて再度お試しください。" },
       { status: 500 }

@@ -84,7 +84,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
   }
 
   const relatedBlogs = await getRelatedBlogs(id, getBlogCategory(blog), 3)
-  const adjacentBlogs = await getAdjacentBlogs(id, getBlogDate(blog))
+  const adjacentBlogs = await getAdjacentBlogs(id, blog.publishedAt)
 
   const description = blog.content
     .replace(/<[^>]*>/g, "")

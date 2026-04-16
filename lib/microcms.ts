@@ -162,7 +162,7 @@ export async function getBlogList(options?: {
   const queries: Record<string, unknown> = {
     limit,
     offset,
-    orders: "-postDate",
+    orders: "-publishedAt",
   }
   
   if (category && category !== "すべて") {
@@ -197,7 +197,7 @@ export async function getRelatedBlogs(currentId: string, category: string, limit
     queries: {
       limit: limit + 1,
       filters: `category[contains]${category}`,
-      orders: "-postDate",
+      orders: "-publishedAt",
     },
   })
   
@@ -207,7 +207,7 @@ export async function getRelatedBlogs(currentId: string, category: string, limit
 }
 
 // 前後の記事を取得
-export async function getAdjacentBlogs(currentId: string, postDate: string): Promise<{ prev: BlogItem | null; next: BlogItem | null }> {
+export async function getAdjacentBlogs(currentId: string, publishedAt: string): Promise<{ prev: BlogItem | null; next: BlogItem | null }> {
   if (!client) {
     return { prev: null, next: null }
   }
@@ -217,8 +217,8 @@ export async function getAdjacentBlogs(currentId: string, postDate: string): Pro
     endpoint: "blog",
     queries: {
       limit: 1,
-      filters: `postDate[less_than]${postDate}`,
-      orders: "-postDate",
+      filters: `publishedAt[less_than]${publishedAt}`,
+      orders: "-publishedAt",
     },
   })
 
@@ -227,8 +227,8 @@ export async function getAdjacentBlogs(currentId: string, postDate: string): Pro
     endpoint: "blog",
     queries: {
       limit: 1,
-      filters: `postDate[greater_than]${postDate}`,
-      orders: "postDate",
+      filters: `publishedAt[greater_than]${publishedAt}`,
+      orders: "publishedAt",
     },
   })
   
