@@ -169,10 +169,17 @@ export async function getBlogList(options?: {
     queries.filters = `category[contains]${category}`
   }
   
-  return await client.get<ListResponse<BlogItem>>({
+  const result = await client.get<ListResponse<BlogItem>>({
     endpoint: "blog",
     queries,
   })
+
+  // postDate優先で再ソート（postDateが未入力の場合はpublishedAtを使用）
+  result.contents.sort((a, b) =>
+    new Date(getBlogDate(b)).getTime() - new Date(getBlogDate(a)).getTime()
+  )
+
+  return result
 }
 
 // 記事詳細を取得
