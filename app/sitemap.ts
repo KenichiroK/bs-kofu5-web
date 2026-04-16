@@ -2,7 +2,7 @@ import { MetadataRoute } from "next"
 import { getAllBlogIds, getBlogList } from "@/lib/microcms"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://bskofu5.com"
+  const baseUrl = "https://www.bskofu5.com"
 
   // 静的ページ
   const staticPages: MetadataRoute.Sitemap = [
@@ -32,6 +32,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/activities`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/faq`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.6,

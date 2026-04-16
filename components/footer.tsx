@@ -8,6 +8,7 @@ const navigation = {
     { name: "記事", href: "/blog" },
     { name: "各隊について", href: "/troops" },
     { name: "団について", href: "/about" },
+    { name: "よくある質問", href: "/faq" },
     { name: "お問い合わせ", href: "/contact" },
   ],
   external: [

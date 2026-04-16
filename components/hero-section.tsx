@@ -35,6 +35,7 @@ export function HeroSection() {
 
           {/* Main Heading */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white text-balance [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
+            <span className="block text-lg sm:text-xl md:text-2xl text-white/80 mb-2 sm:mb-3">山梨・甲府のボーイスカウト</span>
             <span className="block">自然の中で</span>
             <span className="block text-yellow-300 mt-1 sm:mt-2">子どもたちの</span>
             <span className="block mt-1 sm:mt-2">可能性を広げる</span>

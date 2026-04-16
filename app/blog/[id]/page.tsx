@@ -96,7 +96,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
       <ArticleJsonLd
         title={blog.title}
         description={description}
-        url={`https://bskofu5.com/blog/${blog.id}`}
+        url={`https://www.bskofu5.com/blog/${blog.id}`}
         publishDate={getBlogDate(blog)}
         imageUrl={blog.eyecatch?.url}
         category={getBlogCategory(blog)}

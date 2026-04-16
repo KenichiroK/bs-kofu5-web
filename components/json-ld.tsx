@@ -6,8 +6,8 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: "ボーイスカウト甲府第5団",
   alternateName: "BSK5",
-  url: "https://bskofu5.com",
-  logo: "https://bskofu5.com/logo.png",
+  url: "https://www.bskofu5.com",
+  logo: "https://www.bskofu5.com/logo.png",
   description: "山梨県甲府市で活動するボーイスカウト団体。キャンプやハイキングなどの野外活動を通じて、子どもたちの成長をサポートしています。",
   address: {
     "@type": "PostalAddress",
@@ -35,7 +35,7 @@ export function HomeJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "ボーイスカウト甲府第5団",
-    url: "https://bskofu5.com",
+    url: "https://www.bskofu5.com",
     description: "山梨県甲府市で活動するボーイスカウト甲府第5団の公式サイト。幼稚園年長から中学生まで、キャンプやハイキングなどの野外活動を通じて、子どもたちの成長をサポートします。",
     publisher: organizationJsonLd,
   }
@@ -67,11 +67,11 @@ export function BlogListJsonLd() {
     "@type": "CollectionPage",
     name: "記事一覧 | ボーイスカウト甲府第5団",
     description: "ボーイスカウト甲府第5団の活動報告やブログ記事の一覧です。",
-    url: "https://bskofu5.com/blog",
+    url: "https://www.bskofu5.com/blog",
     isPartOf: {
       "@type": "WebSite",
       name: "ボーイスカウト甲府第5団",
-      url: "https://bskofu5.com",
+      url: "https://www.bskofu5.com",
     },
   }
 
@@ -141,7 +141,7 @@ export function ContactJsonLd() {
     "@type": "ContactPage",
     name: "お問い合わせ | ボーイスカウト甲府第5団",
     description: "ボーイスカウト甲府第5団へのお問い合わせ・体験入団のお申し込みページです。",
-    url: "https://bskofu5.com/contact",
+    url: "https://www.bskofu5.com/contact",
     mainEntity: {
       "@type": "Organization",
       name: "ボーイスカウト甲府第5団",
@@ -173,7 +173,7 @@ export function TroopsJsonLd() {
     "@type": "ItemList",
     name: "各隊について | ボーイスカウト甲府第5団",
     description: "ボーイスカウト甲府第5団のビーバー隊、カブ隊、ボーイ隊の紹介です。",
-    url: "https://bskofu5.com/troops",
+    url: "https://www.bskofu5.com/troops",
     itemListElement: [
       {
         "@type": "ListItem",
@@ -199,6 +199,74 @@ export function TroopsJsonLd() {
   return (
     <Script
       id="troops-jsonld"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  )
+}
+
+// FAQページ用
+export function FaqJsonLd() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    name: "よくある質問 | ボーイスカウト甲府第5団",
+    url: "https://www.bskofu5.com/faq",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "ボーイスカウト甲府第5団はどこで活動していますか？",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "山梨YMCAを拠点に、山梨県甲府市内の公園・施設で活動しています。住所は〒400-0032 山梨県甲府市中央3丁目10-7です。",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "何歳から入団できますか？",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "幼稚園年長（ビーバー隊）から中学3年生（ボーイ隊）まで入団できます。",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "体験入団はできますか？",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "はい、随時受け付けています。お問い合わせフォームからお申し込みください。体験は無料です。",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "費用はどのくらいかかりますか？",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "入団費・年間登録費・月会費がかかります。詳細はお問い合わせください。",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "保護者の参加は必要ですか？",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "ビーバー隊は保護者同伴、カブ隊・ボーイ隊は送迎のみでOKです。",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "活動日はいつですか？",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "主に月2回、日曜日に活動しています。",
+        },
+      },
+    ],
+  }
+
+  return (
+    <Script
+      id="faq-jsonld"
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
