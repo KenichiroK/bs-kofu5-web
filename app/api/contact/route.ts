@@ -92,14 +92,11 @@ export async function POST(request: NextRequest) {
       </p>
     `
 
-    // 送信先: 環境変数のアドレス + 送信者（重複除去）
-    const toAddresses = [
-      ...toEmail.split(",").map((a: string) => a.trim()),
-      email,
-    ].filter((v, i, arr) => v && arr.indexOf(v) === i)
+    // 通知メールの送信先: 環境変数のアドレスのみ（送信者には自動返信で別途送る）
+    const toAddresses = toEmail.split(",").map((a: string) => a.trim()).filter(Boolean)
 
-    // 全員に同じ通知メールを送信
     const [notifyResult, replyResult] = await Promise.allSettled([
+      // 団宛て通知メール
       resend.emails.send({
         from: `お問い合わせフォーム <${fromEmail}>`,
         to: toAddresses,
