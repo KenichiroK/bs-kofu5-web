@@ -44,17 +44,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // 記事ページを取得
+  // 記事ページを取得（100件ずつページネーション）
   let blogPages: MetadataRoute.Sitemap = []
-  
+
   try {
-    const blogs = await getBlogList({ limit: 1000 })
-    blogPages = blogs.contents.map((blog) => ({
-      url: `${baseUrl}/blog/${blog.id}`,
-      lastModified: new Date(blog.updatedAt || blog.postDate || blog.publishedAt),
-      changeFrequency: "weekly" as const,
-      priority: 0.6,
-    }))
+    const PER_PAGE = 100
+    let offset = 0
+    let totalCount = 0
+
+    do {
+      const result = await getBlogList({ limit: PER_PAGE, offset })
+      totalCount = result.totalCount
+
+      blogPages.push(
+        ...result.contents.map((blog) => ({
+          url: `${baseUrl}/blog/${blog.id}`,
+          lastModified: new Date(blog.updatedAt || blog.postDate || blog.publishedAt),
+          changeFrequency: "weekly" as const,
+          priority: 0.6,
+        }))
+      )
+
+      offset += PER_PAGE
+    } while (offset < totalCount)
   } catch (error) {
     console.error("Failed to fetch blogs for sitemap:", error)
   }

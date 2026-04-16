@@ -238,32 +238,34 @@ export async function getAdjacentBlogs(currentId: string, postDate: string): Pro
   }
 }
 
+// 全件取得ヘルパー（100件ずつページネーション）
+async function getAllIds(endpoint: string): Promise<string[]> {
+  if (!client) return []
+
+  const ids: string[] = []
+  let offset = 0
+
+  do {
+    const result = await client.get<ListResponse<{ id: string }>>({
+      endpoint,
+      queries: { limit: 100, offset, fields: "id" },
+    })
+    ids.push(...result.contents.map((item) => item.id))
+    if (ids.length >= result.totalCount) break
+    offset += 100
+  } while (true)
+
+  return ids
+}
+
 // 全記事のIDを取得（SSG用）
 export async function getAllBlogIds(): Promise<string[]> {
-  if (!client) {
-    return mockBlogs.map((b) => b.id)
-  }
-  const result = await client.get<ListResponse<BlogItem>>({
-    endpoint: "blog",
-    queries: {
-      limit: 1000,
-      fields: "id",
-    },
-  })
-  return result.contents.map((item) => item.id)
+  if (!client) return mockBlogs.map((b) => b.id)
+  return getAllIds("blog")
 }
 
 // 全お知らせのIDを取得（SSG用）
 export async function getAllNewsIds(): Promise<string[]> {
-  if (!client) {
-    return mockNews.map((n) => n.id)
-  }
-  const result = await client.get<ListResponse<NewsItem>>({
-    endpoint: "news",
-    queries: {
-      limit: 1000,
-      fields: "id",
-    },
-  })
-  return result.contents.map((item) => item.id)
+  if (!client) return mockNews.map((n) => n.id)
+  return getAllIds("news")
 }
