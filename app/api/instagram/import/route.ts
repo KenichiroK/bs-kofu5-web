@@ -25,7 +25,7 @@ async function fetchInstagramPosts(limit = 10): Promise<InstagramPost[]> {
   return data.data
 }
 
-async function uploadImageToS3(imageUrl: string, postId: string): Promise<string> {
+async function uploadImageToS3(imageUrl: string, key: string): Promise<string> {
   const s3Client = new S3Client({
     region: process.env.AWS_REGION!,
     credentials: {
@@ -41,8 +41,6 @@ async function uploadImageToS3(imageUrl: string, postId: string): Promise<string
 
   const buffer = Buffer.from(await response.arrayBuffer())
   const contentType = response.headers.get("content-type") || "image/jpeg"
-  const extension = contentType.includes("png") ? "png" : "jpg"
-  const key = `instagram/${postId}.${extension}`
 
   await s3Client.send(
     new PutObjectCommand({
@@ -50,7 +48,6 @@ async function uploadImageToS3(imageUrl: string, postId: string): Promise<string
       Key: key,
       Body: buffer,
       ContentType: contentType,
-      ACL: "public-read",
     })
   )
 
@@ -80,6 +77,13 @@ async function checkExistingPost(instagramId: string): Promise<boolean> {
   }
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+}
+
 export async function GET(request: NextRequest) {
   // Vercel Cron Jobsからの認証チェック
   const authHeader = request.headers.get("authorization")
@@ -106,36 +110,32 @@ export async function GET(request: NextRequest) {
       const exists = await checkExistingPost(post.id)
       if (exists) continue
 
-      // 画像URL（動画の場合はサムネイル）
+      // 1枚目の画像をS3に保存（アイキャッチ用に手動で使えるように）
       const imageUrl = post.media_type === "VIDEO" ? post.thumbnail_url! : post.media_url
-
-      // S3にアップロード
-      const s3Url = await uploadImageToS3(imageUrl, post.id)
+      await uploadImageToS3(imageUrl, `instagram/${post.id}.jpg`)
 
       // タイトル生成（キャプション1行目）
       const caption = post.caption || ""
       const lines = caption.split("\n").filter((line) => line.trim())
       const title = lines[0]?.substring(0, 100) || `Instagram投稿 ${new Date(post.timestamp).toLocaleDateString("ja-JP")}`
 
-      // 本文生成
-      const content = `
-<p>${caption.replace(/\n/g, "<br>")}</p>
+      // 本文生成（テキスト + Instagramリンク）
+      const content = `<p>${escapeHtml(caption).replace(/\n/g, "<br>")}</p>
 <p><a href="${post.permalink}" target="_blank" rel="noopener noreferrer">Instagramで見る</a></p>
-<!-- instagram-id:${post.id} -->
-      `.trim()
+<!-- instagram-id:${post.id} -->`
 
-      // MicroCMSに登録
+      // MicroCMSに下書きとして登録
       await microCmsClient.create({
         endpoint: "blog",
         content: {
           title,
           content,
-          eyecatch: s3Url,
-          category: "活動報告",
+          category: ["活動報告"],
           postDate: post.timestamp,
           instagramNote: "Instagramからの投稿です",
           isInstagram: true,
         },
+        isDraft: true,
       })
 
       imported++
