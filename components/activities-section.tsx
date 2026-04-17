@@ -1,7 +1,24 @@
+import fs from "fs"
+import path from "path"
 import Link from "next/link"
+import Image from "next/image"
 import { Tent, Mountain, Flame, Compass, Users, Heart, ArrowRight } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+
+// ビルド時にpublic/images/activities/内の画像を自動検出
+function getActivityPhotos(): string[] {
+  const dir = path.join(process.cwd(), "public/images/activities")
+  try {
+    return fs
+      .readdirSync(dir)
+      .filter((f) => /\.(jpg|jpeg|png|webp)$/i.test(f))
+      .sort()
+      .map((f) => `/images/activities/${f}`)
+  } catch {
+    return []
+  }
+}
 
 const activities = [
   {
@@ -37,11 +54,13 @@ const activities = [
 ]
 
 export function ActivitiesSection() {
+  const photos = getActivityPhotos()
+
   return (
-    <section id="activities" className="py-12 md:py-24 bg-background">
+    <section id="activities" className="py-8 md:py-16 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-10 md:mb-16">
+        <div className="text-center mb-6 md:mb-10">
           <p className="text-sm font-medium text-primary uppercase tracking-wider mb-2">Activities</p>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground text-balance">
             多彩な活動を通じて成長
@@ -51,6 +70,31 @@ export function ActivitiesSection() {
             子どもたちの心と体を育てます。
           </p>
         </div>
+
+        {/* Photo Gallery - 横スクロール */}
+        {photos.length > 0 && (
+          <div className="mb-8 md:mb-10">
+            <p className="text-sm text-muted-foreground mb-3 md:hidden">
+              横にスクロールできます →
+            </p>
+            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+              {photos.map((src, i) => (
+                <div
+                  key={src}
+                  className="flex-shrink-0 w-64 md:w-80 h-48 md:h-56 rounded-xl overflow-hidden bg-muted"
+                >
+                  <Image
+                    src={src}
+                    alt={`活動写真${i + 1}`}
+                    width={320}
+                    height={224}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Activities Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">

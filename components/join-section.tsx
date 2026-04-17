@@ -31,7 +31,7 @@ const steps = [
 
 export function JoinSection() {
   return (
-    <section id="join" className="py-12 md:py-24 bg-background">
+    <section id="join" className="py-8 md:py-16 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-start">
           {/* Left Column - Benefits */}

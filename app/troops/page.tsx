@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,7 @@ const troops = [
     colorLight: "bg-beaver-light",
     colorText: "text-beaver",
     icon: Star,
+    image: "/troop-beaver.jpg",
     motto: "なかよし",
     description: "ビーバースカウトは、スカウト活動の入口となる隊です。「みんなとなかよくあそぶ」をモットーに、遊びを通じて自然に親しみ、集団生活の基礎を学びます。",
     activities: [
@@ -48,6 +50,7 @@ const troops = [
     colorLight: "bg-cub-light",
     colorText: "text-cub",
     icon: Heart,
+    image: "/troop-cub.jpg",
     motto: "いつも元気",
     description: "カブスカウトは、「いつも元気」をモットーに、組と呼ばれる小グループで活動します。ハイキングやキャンプなど、より本格的な野外活動が始まります。",
     activities: [
@@ -71,6 +74,7 @@ const troops = [
     colorLight: "bg-boy-light",
     colorText: "text-boy",
     icon: Users,
+    image: "/troop-boy.jpg",
     motto: "そなえよつねに",
     description: "ボーイスカウトは、「そなえよつねに」をモットーに、班と呼ばれる小グループで自主的に活動します。本格的なキャンプや登山など、挑戦的な活動が増えます。",
     activities: [
@@ -118,11 +122,24 @@ export default function TroopsPage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-12 md:space-y-20">
               {troops.map((troop, index) => (
-                <div 
+                <div
                   key={troop.name}
                   className={`flex flex-col ${index % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 lg:gap-12 items-start`}
                 >
-                  {/* Info Card */}
+                  {/* Photo */}
+                  <div className="w-full lg:w-1/2">
+                    <div className="relative aspect-video rounded-xl overflow-hidden">
+                      <Image
+                        src={troop.image}
+                        alt={`${troop.name}の活動写真`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Info Card (隊名・説明・主な活動・特徴を1つにまとめる) */}
                   <div className="w-full lg:w-1/2">
                     <Card className={`border-2 ${troop.colorLight} border-transparent`}>
                       <CardContent className="p-6 md:p-8">
@@ -139,57 +156,52 @@ export default function TroopsPage() {
                             </p>
                           </div>
                         </div>
-                        
+
                         <div className={`inline-flex items-center gap-2 rounded-full ${troop.colorLight} px-4 py-1.5 mb-4`}>
                           <span className={`text-sm font-medium ${troop.colorText}`}>
                             モットー：「{troop.motto}」
                           </span>
                         </div>
-                        
-                        <p className="text-muted-foreground leading-relaxed">
+
+                        <p className="text-muted-foreground leading-relaxed mb-6">
                           {troop.description}
                         </p>
+
+                        {/* 主な活動 */}
+                        <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                          <span className={`h-2 w-2 rounded-full ${troop.color}`} />
+                          主な活動
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                          {troop.activities.map((activity) => (
+                            <div
+                              key={activity}
+                              className="flex items-center gap-3 p-3 rounded-lg bg-muted/50"
+                            >
+                              <span className={`h-2 w-2 rounded-full ${troop.color} flex-shrink-0`} />
+                              <span className="text-sm text-foreground">{activity}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* 特徴 */}
+                        <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                          <span className={`h-2 w-2 rounded-full ${troop.color}`} />
+                          特徴
+                        </h3>
+                        <ul className="space-y-2">
+                          {troop.features.map((feature) => (
+                            <li
+                              key={feature}
+                              className="flex items-start gap-3 text-sm text-muted-foreground"
+                            >
+                              <ArrowRight className={`h-4 w-4 ${troop.colorText} flex-shrink-0 mt-0.5`} />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
                       </CardContent>
                     </Card>
-                  </div>
-
-                  {/* Activities & Features */}
-                  <div className="w-full lg:w-1/2 space-y-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                        <span className={`h-2 w-2 rounded-full ${troop.color}`} />
-                        主な活動
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {troop.activities.map((activity) => (
-                          <div 
-                            key={activity}
-                            className="flex items-center gap-3 p-3 rounded-lg bg-muted/50"
-                          >
-                            <span className={`h-2 w-2 rounded-full ${troop.color} flex-shrink-0`} />
-                            <span className="text-sm text-foreground">{activity}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                        <span className={`h-2 w-2 rounded-full ${troop.color}`} />
-                        特徴
-                      </h3>
-                      <ul className="space-y-2">
-                        {troop.features.map((feature) => (
-                          <li 
-                            key={feature}
-                            className="flex items-start gap-3 text-sm text-muted-foreground"
-                          >
-                            <ArrowRight className={`h-4 w-4 ${troop.colorText} flex-shrink-0 mt-0.5`} />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
                   </div>
                 </div>
               ))}

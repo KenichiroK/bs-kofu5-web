@@ -51,10 +51,10 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-12 md:py-24 bg-primary/5">
+    <section id="contact" className="py-8 md:py-16 bg-primary/5">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 md:mb-10">
           <p className="text-sm font-medium text-primary uppercase tracking-wider mb-2">Contact</p>
           <h2 className="text-3xl font-bold text-foreground sm:text-4xl text-balance">
             お問い合わせ・体験申込

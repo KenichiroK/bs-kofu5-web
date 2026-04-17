@@ -21,10 +21,10 @@ type LatestBlogsSectionProps = {
 
 export function LatestBlogsSection({ blogs }: LatestBlogsSectionProps) {
   return (
-    <section className="py-12 md:py-20 bg-background">
+    <section className="py-8 md:py-14 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-6 md:mb-8">
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 mb-4">
             <FileText className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-primary">Blog</span>
@@ -94,7 +94,7 @@ export function LatestBlogsSection({ blogs }: LatestBlogsSectionProps) {
         )}
 
         {/* View All Link */}
-        <div className="text-center mt-8 md:mt-12">
+        <div className="text-center mt-6 md:mt-8">
           <Button asChild variant="outline" size="lg">
             <Link href="/blog">
               記事一覧を見る

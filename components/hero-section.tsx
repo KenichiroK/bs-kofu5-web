@@ -5,7 +5,7 @@ import { MapPin } from "lucide-react"
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[85vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-primary/5">
+    <section className="relative min-h-[70vh] md:min-h-[85vh] flex items-center justify-center overflow-hidden bg-primary/5">
       {/* Background Image - PC */}
       <Image
         src="/header_hero.jpg"
