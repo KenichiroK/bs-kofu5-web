@@ -1,11 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Mail, MapPin, Send, CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
+import { Mail, MapPin, Send, CheckCircle2, AlertCircle, Loader2, ArrowRight } from "lucide-react"
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -215,6 +216,14 @@ export function ContactSection() {
                     ビーバー隊は保護者同伴、カブ隊・ボーイ隊は送迎のみでOKです。
                   </p>
                 </div>
+              </div>
+              <div className="mt-6">
+                <Button asChild variant="outline" className="w-full">
+                  <Link href="/faq">
+                    よくある質問をもっと見る
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
