@@ -53,6 +53,8 @@ type NewsSectionProps = {
 }
 
 export function NewsSection({ news }: NewsSectionProps) {
+  if (news.length === 0) return null
+
   return (
     <section className="py-8 md:py-14 bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -69,7 +71,6 @@ export function NewsSection({ news }: NewsSectionProps) {
 
         {/* News List */}
         <div className="max-w-3xl mx-auto">
-          {news.length > 0 ? (
             <Card className="border-border">
               <CardContent className="p-0">
                 {news.map((item) => (
@@ -77,13 +78,6 @@ export function NewsSection({ news }: NewsSectionProps) {
                 ))}
               </CardContent>
             </Card>
-          ) : (
-            <Card className="border-border">
-              <CardContent className="p-6 md:p-8 text-center">
-                <p className="text-muted-foreground">現在新しいお知らせはありません</p>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
     </section>
