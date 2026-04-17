@@ -86,6 +86,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
   const relatedBlogs = await getRelatedBlogs(id, getBlogCategory(blog), 3)
   const adjacentBlogs = await getAdjacentBlogs(id, blog.publishedAt)
 
+  // 本文からInstagramのpermalinkを抽出
+  const instagramUrlMatch = blog.content.match(/href="(https:\/\/www\.instagram\.com\/p\/[^"]+)"/)
+  const instagramUrl = instagramUrlMatch ? instagramUrlMatch[1] : null
+
+  // 本文から「Instagramで見る」リンクを除去（上部バナーで表示するため）
+  const cleanedContent = blog.isInstagram
+    ? blog.content.replace(/<p><a href="https:\/\/www\.instagram\.com\/p\/[^"]*"[^>]*>Instagramで見る<\/a><\/p>/, "")
+    : blog.content
+
   const description = blog.content
     .replace(/<[^>]*>/g, "")
     .substring(0, 120)
@@ -107,32 +116,23 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
       <main className="flex-1 pt-16">
         <article>
           {/* Hero Image */}
-          <div className="relative h-64 sm:h-80 md:h-96 lg:h-[500px] bg-muted">
-            {blog.eyecatch ? (
-              <Image
-                src={blog.eyecatch.url}
-                alt={blog.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-primary/20 to-primary/5">
-                <FileText className="h-24 w-24 text-primary/30" />
+          {blog.eyecatch ? (
+            <div className="bg-muted flex justify-center">
+              <div className="relative w-full max-w-5xl aspect-video">
+                <Image
+                  src={blog.eyecatch.url}
+                  alt={blog.title}
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            
-            {/* Badges */}
-            {blog.isInstagram && (
-              <div className="absolute top-4 left-4">
-                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                  <Instagram className="h-4 w-4" />
-                  Instagram
-                </span>
-              </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="h-48 sm:h-64 bg-gradient-to-b from-primary/20 to-primary/5 flex items-center justify-center">
+              <FileText className="h-24 w-24 text-primary/30" />
+            </div>
+          )}
 
           <div className="py-8 md:py-12">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -165,31 +165,31 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                 </h1>
               </div>
 
+              {/* Content */}
+              <div
+                className="prose prose-green max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-a:text-primary"
+                dangerouslySetInnerHTML={{ __html: cleanedContent }}
+              />
+
               {/* Instagram Link */}
-              {blog.isInstagram && blog.instagramNote && (
-                <div className="mb-8 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              {blog.isInstagram && instagramUrl && (
+                <div className="mt-8 max-w-md mx-auto p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                  <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <Instagram className="h-6 w-6 text-pink-500" />
+                      <Instagram className="h-5 w-5 text-pink-500 flex-shrink-0" />
                       <span className="text-sm text-foreground">
-                        {blog.instagramNote || "この記事はInstagramでも公開しています"}
+                        Instagramでも公開中
                       </span>
                     </div>
-                    <Button asChild variant="outline" size="sm" className="border-pink-300 text-pink-600 hover:bg-pink-50">
-                      <a href="https://www.instagram.com/bskofu5/" target="_blank" rel="noopener noreferrer">
-                        Instagramを見る
-                        <ExternalLink className="ml-2 h-4 w-4" />
+                    <Button asChild variant="outline" size="sm" className="border-pink-300 text-pink-600 hover:bg-pink-50 flex-shrink-0">
+                      <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
+                        見る
+                        <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
                       </a>
                     </Button>
                   </div>
                 </div>
               )}
-
-              {/* Content */}
-              <div 
-                className="prose prose-green max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-a:text-primary"
-                dangerouslySetInnerHTML={{ __html: blog.content }}
-              />
 
               {/* Article Navigation */}
               <div className="mt-12 pt-8 border-t border-border">
