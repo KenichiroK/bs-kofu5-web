@@ -2,7 +2,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, FileText, Instagram } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { getBlogList, getBlogDate, getBlogCategory, type BlogItem } from "@/lib/microcms"
 
@@ -58,10 +57,10 @@ export function LatestBlogsSection({ blogs }: LatestBlogsSectionProps) {
                     {/* Instagram Badge */}
                     {blog.isInstagram && (
                       <div className="absolute top-2 left-2">
-                        <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
-                          <Instagram className="h-3 w-3 mr-1" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                          <Instagram className="h-3 w-3" />
                           Instagram
-                        </Badge>
+                        </span>
                       </div>
                     )}
                   </div>
