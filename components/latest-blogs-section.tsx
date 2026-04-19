@@ -1,19 +1,9 @@
 import Link from "next/link"
-import Image from "next/image"
-import { ArrowRight, FileText, Instagram } from "lucide-react"
+import { ArrowRight, FileText } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { getBlogList, getBlogDate, getBlogCategory, type BlogItem } from "@/lib/microcms"
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString)
-  return date.toLocaleDateString("ja-JP", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "Asia/Tokyo",
-  })
-}
+import { getBlogList, type BlogItem } from "@/lib/microcms"
+import { BlogCard } from "@/components/blog-card"
 
 type LatestBlogsSectionProps = {
   blogs: BlogItem[]
@@ -38,51 +28,7 @@ export function LatestBlogsSection({ blogs }: LatestBlogsSectionProps) {
         {blogs.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {blogs.map((blog) => (
-              <Link key={blog.id} href={`/blog/${blog.id}`}>
-                <Card className="h-full border-border hover:border-primary/50 transition-colors overflow-hidden group">
-                  {/* Eyecatch Image */}
-                  <div className="relative aspect-video bg-muted">
-                    {blog.eyecatch ? (
-                      <Image
-                        src={blog.eyecatch.url}
-                        alt={blog.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <FileText className="h-12 w-12 text-muted-foreground/30" />
-                      </div>
-                    )}
-                    {/* Instagram Badge */}
-                    {blog.isInstagram && (
-                      <div className="absolute top-2 left-2">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                          <Instagram className="h-3 w-3" />
-                          Instagram
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded ${
-                        getBlogCategory(blog) === "活動報告"
-                          ? "bg-emerald-500/10 text-emerald-600"
-                          : "bg-primary/10 text-primary"
-                      }`}>
-                        {getBlogCategory(blog)}
-                      </span>
-                      <time className="text-xs text-muted-foreground">
-                        {formatDate(getBlogDate(blog))}
-                      </time>
-                    </div>
-                    <h3 className="font-medium text-foreground line-clamp-2 group-hover:text-primary transition-colors">
-                      {blog.title}
-                    </h3>
-                  </CardContent>
-                </Card>
-              </Link>
+              <BlogCard key={blog.id} blog={blog} />
             ))}
           </div>
         ) : (
