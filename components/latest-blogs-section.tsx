@@ -27,8 +27,10 @@ export function LatestBlogsSection({ blogs }: LatestBlogsSectionProps) {
         {/* Blog Grid */}
         {blogs.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {blogs.map((blog) => (
-              <BlogCard key={blog.id} blog={blog} />
+            {blogs.map((blog, index) => (
+              <div key={blog.id} className={index >= 3 ? "hidden md:block" : ""}>
+                <BlogCard blog={blog} />
+              </div>
             ))}
           </div>
         ) : (
@@ -56,7 +58,7 @@ export function LatestBlogsSection({ blogs }: LatestBlogsSectionProps) {
 // サーバーコンポーネント用のデータ取得関数
 export async function getLatestBlogsData(): Promise<BlogItem[]> {
   try {
-    const result = await getBlogList({ limit: 5 })
+    const result = await getBlogList({ limit: 6 })
     return result.contents
   } catch (error) {
     console.error("Failed to fetch blogs:", error)
