@@ -33,7 +33,8 @@ const formatDate = (dateString: string) => {
   return date.toLocaleDateString("ja-JP", {
     year: "numeric",
     month: "long",
-    day: "numeric"
+    day: "numeric",
+    timeZone: "Asia/Tokyo",
   })
 }
 

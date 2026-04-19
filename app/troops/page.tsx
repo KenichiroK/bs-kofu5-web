@@ -120,15 +120,12 @@ export default function TroopsPage() {
         {/* Troops Detail */}
         <section className="py-12 md:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="space-y-12 md:space-y-20">
-              {troops.map((troop, index) => (
-                <div
-                  key={troop.name}
-                  className={`flex flex-col ${index % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 lg:gap-12 items-start`}
-                >
-                  {/* Photo */}
-                  <div className="w-full lg:w-1/2">
-                    <div className="relative aspect-video rounded-xl overflow-hidden">
+            <div className="space-y-8 md:space-y-12">
+              {troops.map((troop) => (
+                <Card key={troop.name} className="overflow-hidden border-2 border-transparent">
+                  <div className="grid grid-cols-1 lg:grid-cols-2">
+                    {/* 写真エリア */}
+                    <div className={`relative aspect-[16/9] lg:aspect-auto lg:min-h-[400px] ${troop.colorLight}`}>
                       <Image
                         src={troop.image}
                         alt={`${troop.name}の活動写真`}
@@ -137,73 +134,75 @@ export default function TroopsPage() {
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
                     </div>
-                  </div>
 
-                  {/* Info Card (隊名・説明・主な活動・特徴を1つにまとめる) */}
-                  <div className="w-full lg:w-1/2">
-                    <Card className={`border-2 ${troop.colorLight} border-transparent`}>
-                      <CardContent className="p-6 md:p-8">
-                        <div className="flex items-center gap-4 mb-6">
-                          <div className={`flex h-14 w-14 items-center justify-center rounded-full ${troop.color}`}>
-                            <troop.icon className="h-7 w-7 text-white" />
-                          </div>
-                          <div>
-                            <h2 className="text-xl md:text-2xl font-bold text-foreground">
-                              {troop.name}
-                            </h2>
-                            <p className={`text-sm font-medium ${troop.colorText}`}>
-                              対象：{troop.age}
-                            </p>
-                          </div>
+                    {/* 情報エリア */}
+                    <CardContent className="p-6 md:p-8">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className={`flex h-14 w-14 items-center justify-center rounded-full ${troop.color}`}>
+                          <troop.icon className="h-7 w-7 text-white" />
                         </div>
-
-                        <div className={`inline-flex items-center gap-2 rounded-full ${troop.colorLight} px-4 py-1.5 mb-4`}>
-                          <span className={`text-sm font-medium ${troop.colorText}`}>
-                            モットー：「{troop.motto}」
-                          </span>
+                        <div>
+                          <h2 className="text-xl md:text-2xl font-bold text-foreground">
+                            {troop.name}
+                          </h2>
+                          <p className={`text-sm font-medium ${troop.colorText}`}>
+                            対象：{troop.age}
+                          </p>
                         </div>
+                      </div>
 
-                        <p className="text-muted-foreground leading-relaxed mb-6">
-                          {troop.description}
-                        </p>
+                      <div className={`inline-flex items-center gap-2 rounded-full ${troop.colorLight} px-4 py-1.5 mb-4`}>
+                        <span className={`text-sm font-medium ${troop.colorText}`}>
+                          モットー：「{troop.motto}」
+                        </span>
+                      </div>
 
-                        {/* 主な活動 */}
-                        <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                          <span className={`h-2 w-2 rounded-full ${troop.color}`} />
-                          主な活動
-                        </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                          {troop.activities.map((activity) => (
-                            <div
-                              key={activity}
-                              className="flex items-center gap-3 p-3 rounded-lg bg-muted/50"
-                            >
-                              <span className={`h-2 w-2 rounded-full ${troop.color} flex-shrink-0`} />
-                              <span className="text-sm text-foreground">{activity}</span>
-                            </div>
-                          ))}
+                      <p className="text-muted-foreground leading-relaxed mb-6">
+                        {troop.description}
+                      </p>
+
+                      {/* 主な活動 */}
+                      <div className="space-y-4">
+                        <div>
+                          <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+                            <span className={`h-2 w-2 rounded-full ${troop.color}`} />
+                            主な活動
+                          </h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {troop.activities.map((activity) => (
+                              <div
+                                key={activity}
+                                className="flex items-center gap-2 p-2 rounded-lg bg-muted/50"
+                              >
+                                <span className={`h-1.5 w-1.5 rounded-full ${troop.color} flex-shrink-0`} />
+                                <span className="text-xs sm:text-sm text-foreground">{activity}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
 
                         {/* 特徴 */}
-                        <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                          <span className={`h-2 w-2 rounded-full ${troop.color}`} />
-                          特徴
-                        </h3>
-                        <ul className="space-y-2">
-                          {troop.features.map((feature) => (
-                            <li
-                              key={feature}
-                              className="flex items-start gap-3 text-sm text-muted-foreground"
-                            >
-                              <ArrowRight className={`h-4 w-4 ${troop.colorText} flex-shrink-0 mt-0.5`} />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
+                        <div>
+                          <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+                            <span className={`h-2 w-2 rounded-full ${troop.color}`} />
+                            特徴
+                          </h3>
+                          <ul className="space-y-1.5">
+                            {troop.features.map((feature) => (
+                              <li
+                                key={feature}
+                                className="flex items-start gap-2 text-xs sm:text-sm text-muted-foreground"
+                              >
+                                <ArrowRight className={`h-3.5 w-3.5 ${troop.colorText} flex-shrink-0 mt-0.5`} />
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </CardContent>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           </div>
