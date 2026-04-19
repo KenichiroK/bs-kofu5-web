@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { createClient } from "microcms-js-sdk"
 
 interface InstagramPost {
@@ -25,58 +24,6 @@ async function fetchInstagramPosts(limit = 10): Promise<InstagramPost[]> {
   return data.data
 }
 
-async function uploadImageToS3(imageUrl: string, key: string): Promise<string> {
-  const s3Client = new S3Client({
-    region: process.env.AWS_REGION!,
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-    },
-  })
-
-  const response = await fetch(imageUrl)
-  if (!response.ok) {
-    throw new Error(`Failed to download image: ${response.statusText}`)
-  }
-
-  const buffer = Buffer.from(await response.arrayBuffer())
-  const contentType = response.headers.get("content-type") || "image/jpeg"
-
-  await s3Client.send(
-    new PutObjectCommand({
-      Bucket: process.env.AWS_S3_BUCKET!,
-      Key: key,
-      Body: buffer,
-      ContentType: contentType,
-    })
-  )
-
-  return `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
-}
-
-async function checkExistingPost(instagramId: string): Promise<boolean> {
-  const microCmsClient = createClient({
-    serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN!,
-    apiKey: process.env.MICROCMS_API_KEY!,
-  })
-
-  try {
-    const result = await microCmsClient.get({
-      endpoint: "blog",
-      queries: {
-        filters: `isInstagram[equals]true`,
-        limit: 100,
-      },
-    })
-
-    return result.contents.some((post: { content: string }) =>
-      post.content.includes(`instagram-id:${instagramId}`)
-    )
-  } catch {
-    return false
-  }
-}
-
 function escapeHtml(str: string): string {
   return str
     .replace(/&/g, "&amp;")
@@ -100,24 +47,24 @@ export async function GET(request: NextRequest) {
     const posts = await fetchInstagramPosts(10)
     let imported = 0
 
+    // 過去24時間の投稿のみ対象
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+
     for (const post of posts) {
+      // 24時間以内の投稿でなければスキップ
+      if (new Date(post.timestamp) < oneDayAgo) {
+        continue
+      }
+
       // 動画でサムネイルがない場合はスキップ
       if (post.media_type === "VIDEO" && !post.thumbnail_url) {
         continue
       }
 
-      // 重複チェック
-      const exists = await checkExistingPost(post.id)
-      if (exists) continue
-
-      // 1枚目の画像をS3に保存（アイキャッチ用に手動で使えるように）
-      const imageUrl = post.media_type === "VIDEO" ? post.thumbnail_url! : post.media_url
-      await uploadImageToS3(imageUrl, `instagram/${post.id}.jpg`)
-
       // タイトル生成（キャプション1行目）
       const caption = post.caption || ""
       const lines = caption.split("\n").filter((line) => line.trim())
-      const title = lines[0]?.substring(0, 100) || `Instagram投稿 ${new Date(post.timestamp).toLocaleDateString("ja-JP")}`
+      const title = lines[0]?.substring(0, 100) || `Instagram投稿 ${new Date(post.timestamp).toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo" })}`
 
       // 本文生成（テキスト + Instagramリンク）
       const content = `<p>${escapeHtml(caption).replace(/\n/g, "<br>")}</p>
