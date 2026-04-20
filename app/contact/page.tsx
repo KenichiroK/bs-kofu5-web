@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { BreadcrumbNav } from "@/components/breadcrumb-nav"
 import { ContactSection } from "@/components/contact-section"
 import { TreesIcon as Tree } from "lucide-react"
 
@@ -15,6 +16,7 @@ export default function ContactPage() {
       <Header />
       
       <main className="flex-1 pt-16">
+        <BreadcrumbNav items={[{ label: "お問い合わせ" }]} />
         {/* Hero Section */}
         <section className="relative py-16 md:py-24 bg-gradient-to-b from-primary/10 to-background">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -25,6 +25,7 @@ import {
   type BlogItem
 } from "@/lib/microcms"
 import { ArticleJsonLd } from "@/components/json-ld"
+import { BreadcrumbNav } from "@/components/breadcrumb-nav"
 
 export const revalidate = 60
 
@@ -115,6 +116,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
         <Header />
       
       <main className="flex-1 pt-16">
+        <BreadcrumbNav items={[{ label: "記事", href: "/blog" }, { label: blog.title }]} />
         <article>
           {/* Hero Image */}
           {blog.eyecatch ? (

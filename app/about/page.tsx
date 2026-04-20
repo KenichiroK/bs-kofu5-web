@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { BreadcrumbNav } from "@/components/breadcrumb-nav"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { 
@@ -44,6 +45,7 @@ export default function AboutPage() {
       <Header />
       
       <main className="flex-1 pt-16">
+        <BreadcrumbNav items={[{ label: "団について" }]} />
         {/* Hero Section */}
         <section className="relative py-16 md:py-24 bg-gradient-to-b from-primary/10 to-background">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

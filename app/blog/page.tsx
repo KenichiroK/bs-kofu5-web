@@ -11,6 +11,7 @@ import {
 import { getBlogList, type BlogItem } from "@/lib/microcms"
 import { BlogListJsonLd } from "@/components/json-ld"
 import { BlogCard } from "@/components/blog-card"
+import { BreadcrumbNav } from "@/components/breadcrumb-nav"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -57,6 +58,7 @@ export default async function BlogPage({
         <Header />
       
       <main className="flex-1 pt-16">
+        <BreadcrumbNav items={[{ label: "記事" }]} />
         {/* Hero Section */}
         <section className="relative py-12 md:py-20 bg-gradient-to-b from-primary/10 to-background">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
