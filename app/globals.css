@@ -147,6 +147,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  ::placeholder {
+    color: oklch(0.8 0 0);
+  }
 }
 
 /* スクロールバー非表示 */
