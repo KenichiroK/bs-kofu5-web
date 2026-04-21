@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { BreadcrumbNav } from "@/components/breadcrumb-nav"
+import { ActivitiesJsonLd } from "@/components/json-ld"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { 
@@ -78,9 +79,11 @@ const yearlySchedule = [
 
 export default function ActivitiesPage() {
   return (
+    <>
+    <ActivitiesJsonLd />
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
-      
+
       <main className="flex-1 pt-16">
         <BreadcrumbNav items={[{ label: "活動紹介" }]} />
         {/* Hero Section */}
@@ -202,5 +205,6 @@ export default function ActivitiesPage() {
 
       <Footer />
     </div>
+    </>
   )
 }

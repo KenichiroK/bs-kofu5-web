@@ -272,3 +272,27 @@ export function FaqJsonLd() {
     />
   )
 }
+
+// 活動紹介ページ用
+export function ActivitiesJsonLd() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "活動紹介 | ボーイスカウト甲府第5団",
+    description: "ボーイスカウト甲府第5団の活動内容をご紹介。キャンプ、ハイキング、野外炊事など、自然の中で子どもたちが成長できる様々なプログラムを実施しています。",
+    url: "https://www.bskofu5.com/activities",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "ボーイスカウト甲府第5団",
+      url: "https://www.bskofu5.com",
+    },
+  }
+
+  return (
+    <Script
+      id="activities-jsonld"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  )
+}
